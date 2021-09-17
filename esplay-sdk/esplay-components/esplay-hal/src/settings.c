@@ -40,11 +40,11 @@ typedef enum KeyType {
 static nvs_handle handle;
 
 static KeyType settings_types[SettingMax] = {
-    TypeInt, TypeInt, TypeInt, TypeStr, TypeInt, TypeInt, TypeInt
+    TypeInt, TypeInt, TypeInt, TypeStr, TypeInt, TypeInt, TypeInt, TypeInt
 };
 
 static char *settings_keys[SettingMax] = {
-    "volume", "backlight", "playmode", "rom_name", "scale", "wifi", "scale_alg"
+    "volume", "backlight", "playmode", "rom_name", "scale", "wifi", "scale_alg","index"
 };
 
 /**********************
@@ -115,8 +115,10 @@ char *settings_load_str(Setting setting)
 	}
     char *value_out = malloc(len);
     if(!value_out)
+    {
         return NULL;
-	nvs_get_str(handle, settings_keys[setting], value_out, &len);
+    }
+    nvs_get_str(handle, settings_keys[setting], value_out, &len);
 
     return value_out;
 }

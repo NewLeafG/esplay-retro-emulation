@@ -106,7 +106,7 @@ static void handleCharging() {
 
 static void drawHomeScreen()
 {
-	FILE *f;
+	// FILE *f;
     ui_clear_screen();
     UG_SetForecolor(C_YELLOW);
     UG_SetBackcolor(C_BLACK);
@@ -118,34 +118,34 @@ static void drawHomeScreen()
         title = "Wifi ON, go to http://192.168.4.1/";
         UG_PutString((320 / 2) - (strlen(title) * 9 / 2), 32, title);
     }
-    if ((f = fopen(FONT_FILE_PATH, "rb")))
-    {
-        int cnt=0;
-        uint8_t pBuffer[32];
-        char *hz = "汉";
-        unsigned char High8bit, Low8bit;
-        unsigned int pos;
-        High8bit = hz[0];    /* 取高8位数据 */
-        Low8bit = hz[1]; /* 取低8位数据 */
-        printf("size:%d,hz[0]:%x,hz[1]:%x,hz[2]:%x\n",sizeof(hz),hz[0],hz[1],hz[2]);
-        //  uint16_t c = 0xb0a1;//*((uint16_t *)hz[0]);
-        // High8bit = c >> 8;    /* 取高8位数据 */
-        // Low8bit = c & 0x00FF; /* 取低8位数据 */
-       pos = ((High8bit - 0xa1) * 94 + Low8bit - 0xa1) * 16 * 16 / 8;
-        printf("position:%x\n",pos);
-        fseek(f, pos, SEEK_SET);
-        fread(pBuffer, 1, 16 * 16 / 8, f);
-        UG_PutHZ(pBuffer);
-        for(cnt=0;cnt<32;cnt++)
-        {
-      printf("char data:%x\n",pBuffer[cnt]);
-        }
+    // if ((f = fopen(FONT_FILE_PATH, "rb")))
+    // {
+    //     int cnt=0;
+    //     uint8_t pBuffer[32];
+    //     char *hz = "汉";
+    //     unsigned char High8bit, Low8bit;
+    //     unsigned int pos;
+    //     High8bit = hz[0];    /* 取高8位数据 */
+    //     Low8bit = hz[1]; /* 取低8位数据 */
+    //     printf("size:%d,hz[0]:%x,hz[1]:%x,hz[2]:%x\n",sizeof(hz),hz[0],hz[1],hz[2]);
+    //     //  uint16_t c = 0xb0a1;//*((uint16_t *)hz[0]);
+    //     // High8bit = c >> 8;    /* 取高8位数据 */
+    //     // Low8bit = c & 0x00FF; /* 取低8位数据 */
+    //    pos = ((High8bit - 0xa1) * 94 + Low8bit - 0xa1) * 16 * 16 / 8;
+    //     printf("position:%x\n",pos);
+    //     fseek(f, pos, SEEK_SET);
+    //     fread(pBuffer, 1, 16 * 16 / 8, f);
+    //     UG_PutHZ(pBuffer);
+    //     for(cnt=0;cnt<32;cnt++)
+    //     {
+    //   printf("char data:%x\n",pBuffer[cnt]);
+    //     }
 
-    }
-    else
-    {
-        printf("Failed to open font file.\n");
-    }
+    // }
+    // else
+    // {
+    //     printf("Failed to open font file.\n");
+    // }
 
     UG_SetForecolor(C_WHITE);
     UG_SetBackcolor(C_BLACK);
@@ -170,7 +170,7 @@ static void drawHomeScreen()
 
     uint8_t volume = 25;
     settings_load(SettingAudioVolume, &volume);
-    char volStr[3];
+    char volStr[4];
     sprintf(volStr, "%i", volume);
     if (volume == 0)
     {
@@ -649,6 +649,9 @@ void app_main(void)
             drawHomeScreen();
             lastUpdate = 0;
             doRefresh = 1;
+            prevKey.values[GAMEPAD_INPUT_B]=1;
+                    vTaskDelay(500 / portTICK_PERIOD_MS);
+
         }
         if (!prevKey.values[GAMEPAD_INPUT_B] && joystick.values[GAMEPAD_INPUT_B])
             resume();

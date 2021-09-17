@@ -96,7 +96,7 @@ typedef struct PlayerState
 	PlayingMode playing_mode;
 } PlayerState;
 static PlayerState player_state = {
-		0,
+	0,
 };
 static bool keys_locked = false;
 static bool backlight_on = true;
@@ -174,10 +174,10 @@ typedef enum PlayerResult
 	PlayerResultNone = 0,
 	PlayerResultError,
 
-	PlayerResultDone,			///< Playing the song completed, same effect as NextSong
+	PlayerResultDone,	  ///< Playing the song completed, same effect as NextSong
 	PlayerResultNextSong, ///< User requested skipping of next song
 	PlayerResultPrevSong, ///< User requested to play previous song
-	PlayerResultStop,			///< User exited player/requested player termination
+	PlayerResultStop,	  ///< User exited player/requested player termination
 } PlayerResult;
 
 static void push_audio_event(const AudioPlayerEvent audio_event)
@@ -341,8 +341,10 @@ static void player_task(void *arg)
 			{
 				song_index = (song_index + 1) % (int)state->playlist_length;
 			}
-
+			printf("Song count:%d,song index:%d", (int)state->playlist_length, song_index);
 			state->playlist_index = song_index;
+					settings_save(SettingIdx, (int32_t)state->playlist_index);
+
 			push_audio_event(AudioPlayerEventStateChanged);
 		}
 		else if (res == PlayerResultPrevSong)
@@ -353,6 +355,7 @@ static void player_task(void *arg)
 			}
 			state->playlist_index = song_index;
 			push_audio_event(AudioPlayerEventStateChanged);
+					settings_save(SettingIdx, (int32_t)state->playlist_index);
 		}
 		else if (res == PlayerResultStop)
 		{
@@ -465,8 +468,10 @@ static void handle_keypress(event_keypad_t keys, bool *quit)
 	{
 		int vol = audio_volume_get() - 5;
 		if (vol < 1)
+		{
 			vol = 1;
-			audio_volume_set(vol);
+		}
+		audio_volume_set(vol);
 
 		if (vol == 1)
 			audio_terminate();
@@ -501,6 +506,7 @@ static int make_playlist(PlayerState *state, const AudioPlayerParam params)
 
 	if (params.play_all)
 	{
+			int32_t index;
 		size_t start_song = 0;
 		size_t n_songs = 0;
 		size_t song_indices[MAX_SONGS];
@@ -536,6 +542,13 @@ static int make_playlist(PlayerState *state, const AudioPlayerParam params)
 			strncpy(state->playlist[i].filepath, pathbuf, (size_t)(printed + 1));
 		}
 		state->playlist_index = (int)start_song;
+		if (settings_load(SettingIdx, &index) == 0)
+		{
+			if (index >= 0 && index < n_songs)
+			{
+				state->playlist_index = (int)index;
+			}
+		}
 	}
 	else
 	{

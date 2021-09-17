@@ -219,6 +219,7 @@ static int decrunch(HIO_HANDLE **h, char *filename, char **temp)
 
 static void set_md5sum(HIO_HANDLE *f, unsigned char *digest)
 {
+	printf("xinye:start to initialeze md5.\n");
 	unsigned char buf[BUFLEN];
 	MD5_CTX ctx;
 	int bytes_read;
@@ -235,6 +236,8 @@ static void set_md5sum(HIO_HANDLE *f, unsigned char *digest)
 		MD5Update(&ctx, buf, bytes_read);
 	}
 	MD5Final(digest, &ctx);
+		printf("xinye:initialezed md5.\n");
+
 }
 
 static char *get_dirname(char *name)

@@ -2,6 +2,14 @@
   "files.associations": {
     ".blade.php": "html",
     ".tpl": "html",
-    "random": "c"
+    "random": "c",
+    "nes.h": "c",
+    "core.h": "c",
+    "definitions.h": "c",
+    "structures.h": "c",
+    "declarations.h": "c",
+    "settings.h": "c",
+    "cstdio": "c",
+    "typeinfo": "c"
   }
 }

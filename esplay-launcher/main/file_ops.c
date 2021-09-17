@@ -128,7 +128,10 @@ FileType fops_determine_filetype(Entry *entry)
 
 	// TODO: Use regex or something else?
 	const char *filename = entry->name;
+	if(filename==NULL)return FileTypeNone;
 	size_t len = strlen(filename);
+	// printf("filename:%s\n",filename);
+	// size_t len=2;
 	if (len < 4) {
 		return FileTypeNone;
 	}

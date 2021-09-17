@@ -911,6 +911,7 @@ UG_S16 UG_GetXDim( void );
 UG_S16 UG_GetYDim( void );
 void UG_FontSetHSpace( UG_U16 s );
 void UG_FontSetVSpace( UG_U16 s );
+void UG_PutHZ(uint8_t *pBuffer);
 
 /* Miscellaneous functions */
 void UG_WaitForUpdate( void );

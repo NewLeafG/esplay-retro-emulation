@@ -5048,6 +5048,41 @@ void UG_PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc )
 	_UG_PutChar(chr,x,y,fc,bc,&gui->font);
 }
 
+void UG_PutHZ(uint8_t *pBuffer)
+{
+   UG_U16 i, j, k, xo, yo, c, bn, actual_char_width;
+   uint8_t index = 0;
+
+   for (j = 0; j < 16; j++)
+   {
+      xo = 15;
+      for (k = 0; k < 8; k++)
+      {
+         if ((pBuffer[index])&(1 << k))
+         {
+            gui->pset(xo + k, j + 40, gui->fore_color);
+         }
+         else
+         {
+            gui->pset(xo + k, j + 40, gui->back_color);
+         }
+      }
+      index ++;
+      for (k = 0; k < 8; k++)
+      {
+         if ((pBuffer[index])&(1 << k))
+         {
+            gui->pset(xo +8+ k, j + 40, gui->fore_color);
+         }
+         else
+         {
+            gui->pset(xo +8+ k, j + 40, gui->back_color);
+         }
+      }
+      index ++;
+   }
+}
+
 void UG_ConsolePutString( char* str )
 {
    char chr;
